@@ -27,8 +27,10 @@ FIND_PACKAGE(CUDA)
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_12,code=compute_12;${CUDA_NVCC_FLAGS}")
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_13,code=sm_13;${CUDA_NVCC_FLAGS}")
 # SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_13,code=compute_13;${CUDA_NVCC_FLAGS}")
-SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=sm_20;${CUDA_NVCC_FLAGS}")
-SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=compute_20;${CUDA_NVCC_FLAGS}")
+# SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=sm_20;${CUDA_NVCC_FLAGS}")
+# SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_20,code=compute_20;${CUDA_NVCC_FLAGS}")
+SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_61,code=sm_61;${CUDA_NVCC_FLAGS}")
+SET(CUDA_NVCC_FLAGS "-gencode=arch=compute_61,code=compute_61;${CUDA_NVCC_FLAGS}")
 
 IF(NOT VTK_BINARY_DIR)
 FIND_PACKAGE(VTK)
@@ -48,16 +50,23 @@ SET(QT_QMAKE_EXECUTABLE ${VTK_QT_QMAKE_EXECUTABLE} CACHE FILEPATH "")
 SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QTNETWORK TRUE)
 
-FIND_PACKAGE(Qt4 REQUIRED)
+#FIND_PACKAGE(Qt4 REQUIRED)
+#FIND_PACKAGE(Qt5 COMPONENTS Core Widgets REQUIRED)
+FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Widgets REQUIRED)
+FIND_PACKAGE(Qt5Network REQUIRED)
+FIND_PACKAGE(Qt5Xml REQUIRED)
 
 # Enable the use of XML in Qt
 
 
 
-INCLUDE(${QT_USE_FILE})
+#INCLUDE(${QT_USE_FILE})
 
 # Enable the export of symbols
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_EXPORTING")
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_EXPORTING")
+#set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_EXPORTING ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
 
 # Use the include path and library for Qt that is used by VTK.
 INCLUDE_DIRECTORIES(
@@ -66,6 +75,12 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CUDA_SDK_ROOT_DIR}/common/inc
 	${CUDA_TOOLKIT_INCLUDE}
+	${CMAKE_CURRENT_SOURCE_DIR}/Cutil
+	
+	${Qt5Core_INCLUDES}
+	${Qt5Widgets_INCLUDES}
+	${Qt5Network_INCLUDES}
+	${Qt5Xml_INCLUDES}
 )
 
 # Set your files and resources here  
@@ -245,6 +260,9 @@ SET(ExposureRenderHeaders
 	Logger.h
 	LogWidget.h
 	LogDockWidget.h
+	
+	# Cutil
+	cutil_math.h
 )
 
 SET(ExposureRenderMocHeaders 
@@ -315,32 +333,40 @@ SET(ExposureRenderMocHeaders
 # Resources
 SET(ExposureRenderResources Icons/Icons.qrc)
 
-# PATCHED QT4_WRAP_CPP for use with StdAfx
-# Original source: Qt4Macros.cmake
-MACRO (PCH_QT4_WRAP_CPP outfiles )
-  # get include dirs
-  QT4_GET_MOC_FLAGS(moc_flags)
-  QT4_EXTRACT_OPTIONS(moc_files moc_options ${ARGN})
- 
-  FOREACH (it ${moc_files})
-    
-	GET_FILENAME_COMPONENT(it ${it} ABSOLUTE)
-    QT4_MAKE_OUTPUT_FILE(${it} moc_ cxx outfile)
-    set (moc_flags_append "-fStable.h" "-f${it}") # StdAfx hack.
- 
-	# message (STATUS "Moc Flags append ${moc_flags_append}")
-	QT4_CREATE_MOC_COMMAND(${it} ${outfile} "${moc_flags};${moc_flags_append}" "${moc_options}")
-	
-	SET(${outfiles} ${${outfiles}} ${outfile})
+# Instruct CMake to run moc automatically when needed
+set(CMAKE_AUTOMOC ON)
+# Create code from a list of Qt designer ui files
+set(CMAKE_AUTOUIC ON)
 
-  ENDFOREACH(it)
-ENDMACRO (PCH_QT4_WRAP_CPP)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# QT4_CREATE_MOC_COMMAND(Icons/Icons.qrc qrc_Icons.cxx "${moc_flags};${moc_flags_append}" "${moc_options}")
+## PATCHED QT4_WRAP_CPP for use with StdAfx
+## Original source: Qt4Macros.cmake
+#MACRO (PCH_QT4_WRAP_CPP outfiles )
+#  # get include dirs
+#  QT4_GET_MOC_FLAGS(moc_flags)
+#  QT4_EXTRACT_OPTIONS(moc_files moc_options moc_target ${ARGN})
+#  #QT4_EXTRACT_OPTIONS(moc_files moc_options ${ARGN})
+# 
+#  FOREACH (it ${moc_files})
+#    
+#	GET_FILENAME_COMPONENT(it ${it} ABSOLUTE)
+#    QT4_MAKE_OUTPUT_FILE(${it} moc_ cxx outfile)
+#    set (moc_flags_append "-fStable.h" "-f${it}") # StdAfx hack.
+# 
+#	# message (STATUS "Moc Flags append ${moc_flags_append}")
+#	QT4_CREATE_MOC_COMMAND(${it} ${outfile} "${moc_flags};${moc_flags_append}" "${moc_options}" "${moc_target}")
+#	
+#	SET(${outfiles} ${${outfiles}} ${outfile})
+#
+#  ENDFOREACH(it)
+#ENDMACRO (PCH_QT4_WRAP_CPP)
 
-# The rest should just work (sure...)
-PCH_QT4_WRAP_CPP(MOCSrcs ${ExposureRenderMocHeaders} )
-# QT4_ADD_RESOURCES(ResourceSrcs ${ExposureRenderResources})
+## QT4_CREATE_MOC_COMMAND(Icons/Icons.qrc qrc_Icons.cxx "${moc_flags};${moc_flags_append}" "${moc_options}")
+
+## The rest should just work (sure...)
+#PCH_QT4_WRAP_CPP(MOCSrcs ${ExposureRenderMocHeaders} )
+## QT4_ADD_RESOURCES(ResourceSrcs ${ExposureRenderResources})
 
 SOURCE_GROUP("Resources" FILES
   ${ExposureRenderResources}
@@ -580,7 +606,7 @@ SET(LoggingSources
 # Make the logging group
 SOURCE_GROUP("Logging" FILES ${LoggingSources})
 
-ADD_DEFINITIONS(-DQT_GUI_LIBS -DQT_CORE_LIB -DQT_XML_LIB -DQT3_SUPPORT)
+ADD_DEFINITIONS(-DQT_GUI_LIBS -DQT_CORE_LIB -DQT_XML_LIB -DQT3_SUPPORT ${Qt5Core_DEFINITIONS} ${Qt5Widgets_DEFINITIONS} ${Qt5Network_DEFINITIONS})
 
 IF(WIN32)
 	SET(GUI_TYPE WIN32)
@@ -592,14 +618,23 @@ CUDA_ADD_EXECUTABLE(ExposureRender MACOSX_BUNDLE ${ExposureRenderSources} ${UISr
 
 
 TARGET_LINK_LIBRARIES(ExposureRender
-  QVTK
-  ${QT_LIBRARIES}
-  vtkRendering
-  vtkGraphics
-  vtkIO
-  vtkCommon
+  #QVTK
+  #${QT_LIBRARIES}
+  #vtkRendering
+  #vtkGraphics
+  #vtkIO
+  #vtkCommon
 
-  vtkViews
+  #vtkViews
+
+  
+  
+  ${Qt5Core_LIBRARIES}
+  ${Qt5Widgets_LIBRARIES}
+  ${Qt5Network_LIBRARIES}
+  ${Qt5Xml_LIBRARIES}
+
+  ${VTK_LIBRARIES}
 )
 
 ### Precompiled headers ###
@@ -607,6 +642,9 @@ if (MSVC)
    set_target_properties(ExposureRender PROPERTIES COMPILE_FLAGS "/YuStable.h")
    set_source_files_properties(Stable.cpp PROPERTIES COMPILE_FLAGS "/YcStable.h")
   # set_source_files_properties(Stable.cpp PROPERTIES COMPILE_FLAGS "/YcUtilities.h")
+
+  # Force include Stable.h because automoc won't import it
+  add_definitions(/FI"Stable.h")
 endif(MSVC)
 
 ### VTK dependencies ###
@@ -618,7 +656,7 @@ SET(CudaDlls ${CUDA_TOOLKIT_ROOT_DIR}/bin/cudart32_40_17.dll)
 INSTALL_FILES(/bin FILES ${CudaDlls})
 
 ### QT dependencies ###
-SET(QtDlls ${QT_BINARY_DIR}/QtCore4.dll ${QT_BINARY_DIR}/QtGui4.dll ${QT_BINARY_DIR}/QtXml4.dll ${QT_BINARY_DIR}/QtSql4.dll ${QT_BINARY_DIR}/QtNetwork4.dll)
+SET(QtDlls ${QT_BINARY_DIR}/Qt5Core.dll ${QT_BINARY_DIR}/Qt5Gui.dll ${QT_BINARY_DIR}/Qt5Xmld.dll ${QT_BINARY_DIR}/Qt5Sql.dll ${QT_BINARY_DIR}/Qt5Network.dll)
 INSTALL_FILES(/bin FILES ${QtDlls})
 
 ### Example .mhd and .raw files ###

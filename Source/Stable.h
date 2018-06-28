@@ -13,9 +13,10 @@
 
 #pragma once
 
-#include <QtGui>
+//#include <QtCore>
+#include <QtWidgets>
 #include <QtXml\qdom.h>
-#include <QHttp>
+#include <QNetworkAccessManager>
 
 #include "Utilities.h"
 #include "Logger.h"

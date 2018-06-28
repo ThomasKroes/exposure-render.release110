@@ -18,7 +18,8 @@
 QHttpGet::QHttpGet(QObject* pParent /*= NULL*/) :
 	QObject(pParent)
 {
-    connect(&m_Http, SIGNAL(done(bool)), this, SLOT(HttpDone(bool)));
+	//manager = new QNetworkAccessManager(this);
+    //connect(&m_Http, SIGNAL(done(bool)), this, SLOT(HttpDone(bool)));
 }
 
 bool QHttpGet::GetFile(const QUrl& Url, const QString& FilePath)
@@ -48,18 +49,23 @@ bool QHttpGet::GetFile(const QUrl& Url, const QString& FilePath)
         Log("Error: Cannot write m_File ", "globe");
         return false;
     }
+	/*
+	QNetworkRequest request;
+	request.setUrl(Url.path);
 
-    m_Http.setHost(Url.host(), Url.port(80));
-    m_Http.get(Url.path(), &m_File);
+    m_Http.connectToHost(Url.host(), Url.port(80));
+	QNetworkReply reply = m_Http.get(request);
+	//m_Http.get(Url.path(), &m_File);
     m_Http.close();
-
+	*/
     return true;
 }
 
 void QHttpGet::HttpDone(bool Error)
 {
-    if (Error)
-		Log("Error: " + QString(m_Http.errorString()), QLogger::Critical);
+	if (Error) {
+		//Log("Error: " + QString(m_Http.errorString()), QLogger::Critical);
+	}
 
     m_File.close();
     emit done();
