@@ -29,6 +29,6 @@ private slots:
     void HttpDone(bool Error);
 
 private:
-    QHttp	m_Http;
+	//QNetworkAccessManager	*manager;
     QFile	m_File;
 };

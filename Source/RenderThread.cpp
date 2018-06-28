@@ -352,20 +352,20 @@ bool QRenderThread::Load(QString& FileName)
 
 	if (!FileInfo.exists())
 	{
-		Log(QString(QFileInfo(FileName).filePath().replace("//", "/")).toAscii() + "  does not exist!", QLogger::Critical);
+		Log(QString(QFileInfo(FileName).filePath().replace("//", "/")).toLatin1() + "  does not exist!", QLogger::Critical);
 		return false;
 	}
 
-	Log(QString("Loading " + QFileInfo(FileName).fileName()).toAscii());
+	Log(QString("Loading " + QFileInfo(FileName).fileName()).toLatin1());
 
 	// Exit if the reader can't read the file
-	if (!MetaImageReader->CanReadFile(m_FileName.toAscii()))
+	if (!MetaImageReader->CanReadFile(m_FileName.toLatin1()))
 	{
-		Log(QString("Meta image reader can't read file " + QFileInfo(FileName).fileName()).toAscii(), QLogger::Critical);
+		Log(QString("Meta image reader can't read file " + QFileInfo(FileName).fileName()).toLatin1(), QLogger::Critical);
 		return false;
 	}
 
-	MetaImageReader->SetFileName(m_FileName.toAscii());
+	MetaImageReader->SetFileName(m_FileName.toLatin1());
 
 	MetaImageReader->Update();
 
@@ -379,7 +379,7 @@ bool QRenderThread::Load(QString& FileName)
 	
 	Log("Casting volume data type to short", "grid");
 
-	ImageCast->SetInput(MetaImageReader->GetOutput());
+	ImageCast->SetInputConnection(MetaImageReader->GetOutputPort());
 	ImageCast->SetOutputScalarTypeToShort();
 	ImageCast->Update();
 
@@ -433,7 +433,7 @@ bool QRenderThread::Load(QString& FileName)
 	Log("Creating gradient magnitude volume", "grid");
 		
 	GradientMagnitude->SetDimensionality(3);
-	GradientMagnitude->SetInput(ImageCast->GetOutput());
+	GradientMagnitude->SetInputConnection(ImageCast->GetOutputPort());
 	GradientMagnitude->Update();
 
 	vtkImageData* GradientMagnitudeBuffer = GradientMagnitude->GetOutput();

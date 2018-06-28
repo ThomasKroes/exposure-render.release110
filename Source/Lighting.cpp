@@ -96,7 +96,7 @@ void QLighting::RemoveLight(QLight* pLight)
 	Log("'" + pLight->GetName() + "' removed from the scene", "light-bulb");
 
 	// Remove from light list
-	m_Lights.remove(*pLight);
+	m_Lights.removeOne(*pLight);
 
 	m_pSelectedLight = NULL;
 

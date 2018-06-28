@@ -1,30 +1,58 @@
-##Introduction
-This page explains how to build exposure render with Visual Studio
+## Introduction
+This page explains how to build exposure render with Visual Studio 2017
 
-##Dependencies
-Exposure render depends on: CUDA, Qt and VTK
+## Dependencies
+Exposure render depends on: CUDA, Qt and VTK.
 
-###CUDA
+Versions used in this update:
+* CUDA 9.2
+* Qt 5.11.1
+* VTK 7.1.1
+* Microsoft Visual Studio 2017
 
+### CUDA
 You can skip this step if you already have the CUDA SDK and toolkit installed
-The encessary installers can be downloaded from: http://developer.nvidia.com/cuda-toolkit-40 * Download and install the GPU Computing SDK * Download and install the CUDA Toolkit * Download and install the developer drivers
 
-###Qt
-Skip this step if you already have compiled Qt with Visual Studio 20xx
+The necessary installers can be downloaded from: http://developer.nvidia.com/cuda-toolkit-40
+* Download and install the GPU Computing SDK
+* Download and install the CUDA Toolkit
+* Download and install the developer drivers
 
-Download the Qt sources from: http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.7.3.zip
+### Qt
+Skip this step if you already have installed Qt
 
-Extract to a directory on your hard drive, e.g. C:\Qt\4.7.3. Note that the path may not contain spaces.
+* Download the Qt installer from: https://www.qt.io/download-qt-installer
+* Under Qt->5.11.1, Make sure you check the box for MSVC 2017 64-bit
+* Add an environment variable called QTDIR and set it to \<install dir\>\5.11.1\msvc2017_64
 
-Add an environment variable called QTDIR and set it to the dir. created in the previous step
-Open the Visual Studio command prompt and navigate towards the Qt dir.
-Run the following command: configure -debug-and-release -opensource -shared -no-qt3support -qt-sql-sqlite -phonon -phonon-backend -no-webkit -no-script -platform win32-msvc2010
-Press y to accept the license
-Run nmake to build Qt
-More references on building Qt: http://thomasstockx.blogspot.com/2011/03/qt-472-in-visual-studio-2010.html
+### VTK
+VTK must be compiled with Qt support
+* Download the VTK 7.1.1 sources from the VTK website: http://www.vtk.org/VTK/resources/software.html
+* Extract the zip file (for instance c:\VTK\7.1.1)
+* Run CMAKE and set the source dir to the VTK root dir
+* Make sure to use the 64-bit compiler
+* Make sure to check the Qt check box in the VTK settings
+* For the GUI to run you need to build VTK with GUI support
+* See https://www.vtk.org/Wiki/VTK/Configure_and_Build for additional info/help
+* You might also consider to build the examples
+* Generate the Visual Studio 2017 solution files
+* Open the generated solution and build it, RelWithDebugInfo is advised
 
-###VTK
-VTK must be compiled with Qt support * Download the latest sources from the VTK website: http://www.vtk.org/VTK/resources/software.html * Extract the zip file (for instance c:\VTK\5.61) * Run cmake and set the source dir. to the VTK root dir * Make sure to check the Qt check box in the VTK settings * For the GUI to run you need to build VTK with GUI support * You might also consider to build the examples * Generate the Visual Studio 2010 solution files
-Open the generated solution and build it, RelWithDebugInfo is advised
 
-Afetr building, copy the presets directory from the source dir to the build dir.
+### Exposure Render
+* Run CMAKE and set the source dir to the Exposure Render Source dir
+* Make sure to select the 64-bit compiler.
+* After building, copy the presets directory from the source dir to the build dir.
+
+## Notes
+* It might be required to update the maximum MVC version number in CUDA code.:
+	* In \<CUDA_install_dir\>\NVIDIA GPU Computing Toolkit\CUDA\v9.2\include\crt\host_config.h
+	* Change the right hand side of the equation: "#if _MSC_VER < 1600 || _MSC_VER > 1914" to a version number high enough to include your used Visual Studio version
+* In order to run Exposure Render from Visual Studio, you might have to set ExposureRender as the startup project.
+* Executable might not start due to missing DLL's:
+	* Copy all the dll files from \<VTK_build_dir\>bin\Debug to \<ExposureRender_build_dir\>\debug
+	* Copy Qt5Cored, Qt5Guid, Qt5Widgetsd, Qt5Xmld dll from \<Qt_install_dir\>\5.11.1\msvc2017_64\bin to \<ExposureRender_build_dir\>\debug
+* Examples folder, ReadMe.txt and contets of presets folder from Exposure Source directory might also have to be copied to \<ExposureRender_build_dir\>\debug
+* Currently GPU Capability is set to 5.0. If incompatible with your GPU Capability (Can be seen on startup screen of Exposure Render):
+	* In CMakeLists.txt:
+	* Change 'SET(CUDA_NVCC_FLAGS "-arch=sm_50;${CUDA_NVCC_FLAGS}")', to 'SET(CUDA_NVCC_FLAGS "-arch=sm_XX;${CUDA_NVCC_FLAGS}")', where XX is your Capability.
