@@ -53,3 +53,6 @@ VTK must be compiled with Qt support
 	* Copy all the dll files from \<VTK_build_dir\>bin\Debug to \<ExposureRender_build_dir\>\debug
 	* Copy Qt5Cored, Qt5Guid, Qt5Widgetsd, Qt5Xmld dll from \<Qt_install_dir\>\5.11.1\msvc2017_64\bin to \<ExposureRender_build_dir\>\debug
 * Examples folder, ReadMe.txt and contets of presets folder from Exposure Source directory might also have to be copied to \<ExposureRender_build_dir\>\debug
+* Currently GPU Capability is set to 5.0. If incompatible with your GPU Capability (Can be seen on startup screen of Exposure Render):
+	* In CMakeLists.txt:
+	* Change 'SET(CUDA_NVCC_FLAGS "-arch=sm_50;${CUDA_NVCC_FLAGS}")', to 'SET(CUDA_NVCC_FLAGS "-arch=sm_XX;${CUDA_NVCC_FLAGS}")', where XX is your Capability.
