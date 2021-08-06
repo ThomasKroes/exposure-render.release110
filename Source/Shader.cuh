@@ -398,6 +398,7 @@ public:
 			case Phase:
 				return m_IsotropicPhase.SampleF(Wo, Wi, Pdf, S.m_Dir);
 		}
+		return 1.f;
 	}
 
 	HOD float Pdf(const Vec3f& Wo, const Vec3f& Wi)

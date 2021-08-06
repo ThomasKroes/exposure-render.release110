@@ -323,34 +323,34 @@ void BindConstants(CScene* pScene)
 	const float3 AaBbMin = make_float3(pScene->m_BoundingBox.GetMinP().x, pScene->m_BoundingBox.GetMinP().y, pScene->m_BoundingBox.GetMinP().z);
 	const float3 AaBbMax = make_float3(pScene->m_BoundingBox.GetMaxP().x, pScene->m_BoundingBox.GetMaxP().y, pScene->m_BoundingBox.GetMaxP().z);
 
-	HandleCudaError(cudaMemcpyToSymbol("gAaBbMin", &AaBbMin, sizeof(float3)));
-	HandleCudaError(cudaMemcpyToSymbol("gAaBbMax", &AaBbMax, sizeof(float3)));
+	HandleCudaError(cudaMemcpyToSymbol(gAaBbMin, &AaBbMin, sizeof(float3)));
+	HandleCudaError(cudaMemcpyToSymbol(gAaBbMax, &AaBbMax, sizeof(float3)));
 
 	const float3 InvAaBbMin = make_float3(pScene->m_BoundingBox.GetInvMinP().x, pScene->m_BoundingBox.GetInvMinP().y, pScene->m_BoundingBox.GetInvMinP().z);
 	const float3 InvAaBbMax = make_float3(pScene->m_BoundingBox.GetInvMaxP().x, pScene->m_BoundingBox.GetInvMaxP().y, pScene->m_BoundingBox.GetInvMaxP().z);
 
-	HandleCudaError(cudaMemcpyToSymbol("gInvAaBbMin", &InvAaBbMin, sizeof(float3)));
-	HandleCudaError(cudaMemcpyToSymbol("gInvAaBbMax", &InvAaBbMax, sizeof(float3)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvAaBbMin, &InvAaBbMin, sizeof(float3)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvAaBbMax, &InvAaBbMax, sizeof(float3)));
 
 	const float IntensityMin		= pScene->m_IntensityRange.GetMin();
 	const float IntensityMax		= pScene->m_IntensityRange.GetMax();
 	const float IntensityRange		= pScene->m_IntensityRange.GetRange();
 	const float IntensityInvRange	= 1.0f / IntensityRange;
 
-	HandleCudaError(cudaMemcpyToSymbol("gIntensityMin", &IntensityMin, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gIntensityMax", &IntensityMax, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gIntensityRange", &IntensityRange, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gIntensityInvRange", &IntensityInvRange, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gIntensityMin, &IntensityMin, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gIntensityMax, &IntensityMax, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gIntensityRange, &IntensityRange, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gIntensityInvRange, &IntensityInvRange, sizeof(float)));
 
 	const float StepSize		= pScene->m_StepSizeFactor * pScene->m_GradientDelta;
 	const float StepSizeShadow	= pScene->m_StepSizeFactorShadow * pScene->m_GradientDelta;
 
-	HandleCudaError(cudaMemcpyToSymbol("gStepSize", &StepSize, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gStepSizeShadow", &StepSizeShadow, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gStepSize, &StepSize, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gStepSizeShadow, &StepSizeShadow, sizeof(float)));
 
 	const float DensityScale = pScene->m_DensityScale;
 
-	HandleCudaError(cudaMemcpyToSymbol("gDensityScale", &DensityScale, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDensityScale, &DensityScale, sizeof(float)));
 	
 	const float GradientDelta		= 1.0f * pScene->m_GradientDelta;
 	const float InvGradientDelta	= 1.0f / GradientDelta;
@@ -358,51 +358,51 @@ void BindConstants(CScene* pScene)
 	const Vec3f GradientDeltaY(0.0f, GradientDelta, 0.0f);
 	const Vec3f GradientDeltaZ(0.0f, 0.0f, GradientDelta);
 	
-	HandleCudaError(cudaMemcpyToSymbol("gGradientDelta", &GradientDelta, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gInvGradientDelta", &InvGradientDelta, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gGradientDeltaX", &GradientDeltaX, sizeof(Vec3f)));
-	HandleCudaError(cudaMemcpyToSymbol("gGradientDeltaY", &GradientDeltaY, sizeof(Vec3f)));
-	HandleCudaError(cudaMemcpyToSymbol("gGradientDeltaZ", &GradientDeltaZ, sizeof(Vec3f)));
+	HandleCudaError(cudaMemcpyToSymbol(gGradientDelta, &GradientDelta, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvGradientDelta, &InvGradientDelta, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gGradientDeltaX, &GradientDeltaX, sizeof(Vec3f)));
+	HandleCudaError(cudaMemcpyToSymbol(gGradientDeltaY, &GradientDeltaY, sizeof(Vec3f)));
+	HandleCudaError(cudaMemcpyToSymbol(gGradientDeltaZ, &GradientDeltaZ, sizeof(Vec3f)));
 	
 	const int FilmWidth		= pScene->m_Camera.m_Film.GetWidth();
 	const int Filmheight	= pScene->m_Camera.m_Film.GetHeight();
 	const int FilmNoPixels	= pScene->m_Camera.m_Film.m_Resolution.GetNoElements();
 
-	HandleCudaError(cudaMemcpyToSymbol("gFilmWidth", &FilmWidth, sizeof(int)));
-	HandleCudaError(cudaMemcpyToSymbol("gFilmHeight", &Filmheight, sizeof(int)));
-	HandleCudaError(cudaMemcpyToSymbol("gFilmNoPixels", &FilmNoPixels, sizeof(int)));
+	HandleCudaError(cudaMemcpyToSymbol(gFilmWidth, &FilmWidth, sizeof(int)));
+	HandleCudaError(cudaMemcpyToSymbol(gFilmHeight, &Filmheight, sizeof(int)));
+	HandleCudaError(cudaMemcpyToSymbol(gFilmNoPixels, &FilmNoPixels, sizeof(int)));
 
 	const int FilterWidth = 1;
 
-	HandleCudaError(cudaMemcpyToSymbol("gFilterWidth", &FilterWidth, sizeof(int)));
+	HandleCudaError(cudaMemcpyToSymbol(gFilterWidth, &FilterWidth, sizeof(int)));
 
 	const float FilterWeights[10] = { 0.11411459588254977f, 0.08176668094332218f, 0.03008028089187349f, 0.01f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
-	HandleCudaError(cudaMemcpyToSymbol("gFilterWeights", &FilterWeights, 10 * sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gFilterWeights, &FilterWeights, 10 * sizeof(float)));
 
 	const float Gamma		= pScene->m_Camera.m_Film.m_Gamma;
 	const float InvGamma	= 1.0f / Gamma;
 	const float Exposure	= pScene->m_Camera.m_Film.m_Exposure;
 	const float InvExposure	= 1.0f / Exposure;
 
-	HandleCudaError(cudaMemcpyToSymbol("gExposure", &Exposure, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gInvExposure", &InvExposure, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gGamma", &Gamma, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gInvGamma", &InvGamma, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gExposure, &Exposure, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvExposure, &InvExposure, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gGamma, &Gamma, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvGamma, &InvGamma, sizeof(float)));
 
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseEnabled", &pScene->m_DenoiseParams.m_Enabled, sizeof(bool)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseWindowRadius", &pScene->m_DenoiseParams.m_WindowRadius, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseInvWindowArea", &pScene->m_DenoiseParams.m_InvWindowArea, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseNoise", &pScene->m_DenoiseParams.m_Noise, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseWeightThreshold", &pScene->m_DenoiseParams.m_WeightThreshold, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseLerpThreshold", &pScene->m_DenoiseParams.m_LerpThreshold, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gDenoiseLerpC", &pScene->m_DenoiseParams.m_LerpC, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseEnabled, &pScene->m_DenoiseParams.m_Enabled, sizeof(bool)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseWindowRadius, &pScene->m_DenoiseParams.m_WindowRadius, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseInvWindowArea, &pScene->m_DenoiseParams.m_InvWindowArea, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseNoise, &pScene->m_DenoiseParams.m_Noise, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseWeightThreshold, &pScene->m_DenoiseParams.m_WeightThreshold, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseLerpThreshold, &pScene->m_DenoiseParams.m_LerpThreshold, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gDenoiseLerpC, &pScene->m_DenoiseParams.m_LerpC, sizeof(float)));
 
 	const float NoIterations	= pScene->GetNoIterations();
-	const float InvNoIterations = 1.0f / __max(1.0f, NoIterations);
+	const float InvNoIterations = 1.0f / std::max(1.0f, NoIterations);
 
-	HandleCudaError(cudaMemcpyToSymbol("gNoIterations", &NoIterations, sizeof(float)));
-	HandleCudaError(cudaMemcpyToSymbol("gInvNoIterations", &InvNoIterations, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gNoIterations, &NoIterations, sizeof(float)));
+	HandleCudaError(cudaMemcpyToSymbol(gInvNoIterations, &InvNoIterations, sizeof(float)));
 }
 
 void Render(const int& Type, CScene& Scene, CTiming& RenderImage, CTiming& BlurImage, CTiming& PostProcessImage, CTiming& DenoiseImage)

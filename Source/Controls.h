@@ -13,6 +13,11 @@
 
 #pragma once
 
+#include <QPushButton>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QInputDialog>
+
 class QColorPushButton : public QPushButton
 {
 	Q_OBJECT

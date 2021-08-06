@@ -27,12 +27,12 @@ public:
 		Free();
 	}
 
-	CCudaModel::CCudaModel(const CCudaModel& Other)
+	CCudaModel(const CCudaModel& Other)
 	{
 		*this = Other;
 	}
 
-	CCudaModel& CCudaModel::operator=(const CCudaModel& Other)
+	CCudaModel& operator=(const CCudaModel& Other)
 	{
 		return *this;
 	}

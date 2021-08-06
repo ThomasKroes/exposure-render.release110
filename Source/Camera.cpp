@@ -139,10 +139,14 @@ void QCamera::ReadXML(QDomElement& Parent)
 {
 	QPresetXML::ReadXML(Parent);
 
-	m_Film.ReadXML(Parent.firstChildElement("Film"));
-	m_Aperture.ReadXML(Parent.firstChildElement("Aperture"));
-	m_Projection.ReadXML(Parent.firstChildElement("Projection"));
-	m_Focus.ReadXML(Parent.firstChildElement("Focus"));
+	auto film = Parent.firstChildElement("Film");
+	m_Film.ReadXML(film);
+	auto ap = Parent.firstChildElement("Aperture");
+	m_Aperture.ReadXML(ap);
+	auto proj = Parent.firstChildElement("Projection");
+	m_Projection.ReadXML(proj);
+	auto focus = Parent.firstChildElement("Focus");
+	m_Focus.ReadXML(focus);
 
 	ReadVectorElement(Parent, "From", m_From.x, m_From.y, m_From.z);
 	ReadVectorElement(Parent, "Target", m_Target.x, m_Target.y, m_Target.z);

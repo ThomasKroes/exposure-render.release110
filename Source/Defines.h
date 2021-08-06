@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <host_defines.h>
+#include <cuda_runtime.h>
 #include <float.h>
 
 #pragma warning(disable : 4244)

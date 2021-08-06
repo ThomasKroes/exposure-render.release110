@@ -52,7 +52,7 @@ public:
 	int					GetID(void) const;
 	bool				GetDirty(void) const;
 	void				SetDirty(const bool& Dirty);
-	void				ReadXML(QDomElement& Parent);
+	void				ReadXML(const QDomElement& Parent);
 	QDomElement			WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

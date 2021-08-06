@@ -17,7 +17,7 @@ class QGridItem : public QGraphicsRectItem
 {
 public:
 	QGridItem(QGraphicsItem* pParent);
-	QGridItem::QGridItem(const QGridItem& Other);
+	QGridItem(const QGridItem& Other);
 	QGridItem& operator = (const QGridItem& Other);
 
 	virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget);
