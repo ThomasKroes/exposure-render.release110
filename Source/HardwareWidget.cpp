@@ -158,7 +158,7 @@ void QCudaDevicesModel::EnumerateDevices(void)
 		HandleCudaError(cudaGetDeviceProperties(&DeviceProperties, DeviceID));
 
 		CudaDevice.m_ID					= DeviceID;
-		CudaDevice.m_Name				= QString::fromAscii(DeviceProperties.name);
+		CudaDevice.m_Name				= QString::fromLatin1(DeviceProperties.name);
 		CudaDevice.m_Capability			= QString::number(DeviceProperties.major) + "." + QString::number(DeviceProperties.minor);
 		CudaDevice.m_GlobalMemory		= QString::number((float)DeviceProperties.totalGlobalMem / powf(1024.0f, 2.0f)) + "MB";
 		CudaDevice.m_NoMultiProcessors	= QString::number(DeviceProperties.multiProcessorCount);
@@ -226,7 +226,7 @@ QHardwareWidget::QHardwareWidget(QWidget* pParent) :
 
 	m_Model.EnumerateDevices();
 
-	m_Devices.horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+	m_Devices.horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	m_Devices.horizontalHeader()->setStretchLastSection(true); 
 	m_Devices.horizontalHeader()->setDefaultSectionSize(1);
 	m_Devices.horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);

@@ -28,8 +28,8 @@ class QCamera : public QPresetXML
 public:
 	QCamera(QObject* pParent = NULL);
 	virtual ~QCamera(void);
-	QCamera::QCamera(const QCamera& Other);
-	QCamera& QCamera::operator=(const QCamera& Other);
+	QCamera(const QCamera& Other);
+	QCamera& operator=(const QCamera& Other);
 
 	QFilm&			GetFilm(void);
 	void			SetFilm(const QFilm& Film);

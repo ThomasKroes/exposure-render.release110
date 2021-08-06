@@ -71,7 +71,7 @@ void QLighting::OnBackgroundChanged(void)
 	emit Changed();
 }
 
-void QLighting::AddLight(QLight& Light)
+void QLighting::AddLight(const QLight& Light)
 {
 	// Add to list
 	m_Lights.append(Light);
@@ -96,12 +96,12 @@ void QLighting::RemoveLight(QLight* pLight)
 	Log("'" + pLight->GetName() + "' removed from the scene", "light-bulb");
 
 	// Remove from light list
-	m_Lights.remove(*pLight);
+	m_Lights.removeOne(*pLight);
 
 	m_pSelectedLight = NULL;
 
 	// Deselect
-	SetSelectedLight(NULL);
+	SetSelectedLight(nullptr);
 
 	// Let others know the lighting has changed
 	emit Changed();
@@ -226,7 +226,7 @@ void QLighting::RenameLight(const int& Index, const QString& Name)
 
 void QLighting::ReadXML(QDomElement& Parent)
 {
-	SetSelectedLight(NULL);
+	SetSelectedLight(nullptr);
 
 	QPresetXML::ReadXML(Parent);
 
@@ -241,7 +241,8 @@ void QLighting::ReadXML(QDomElement& Parent)
 		m_Lights.append(LightPreset);
 
 		// Load preset into it
-		m_Lights.back().ReadXML(DomNode.toElement());
+		auto var = DomNode.toElement();
+		m_Lights.back().ReadXML(var);
 	}
 
 	QDomElement Background = Parent.firstChildElement("Background").toElement();

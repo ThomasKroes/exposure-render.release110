@@ -23,7 +23,7 @@ class QTransferFunctionItem : public QGraphicsRectItem
 public:
 	QTransferFunctionItem(QGraphicsItem* pParent);
 	virtual ~QTransferFunctionItem(void);
-	QTransferFunctionItem::QTransferFunctionItem(const QTransferFunctionItem& Other);
+	QTransferFunctionItem(const QTransferFunctionItem& Other);
 	QTransferFunctionItem& operator = (const QTransferFunctionItem& Other);
 
 	virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget);

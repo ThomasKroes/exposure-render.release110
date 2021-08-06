@@ -13,6 +13,10 @@
 
 #pragma once
 
+#include <QObject>
+#include <QDomDocument>
+#include <QMessageBox>
+
 class QPresetXML : public QObject
 {
 	Q_OBJECT
@@ -20,7 +24,7 @@ class QPresetXML : public QObject
 public:
 	QPresetXML(QObject* pParent = NULL, const QString& Name = "");
 
-	QPresetXML::QPresetXML(const QPresetXML& Other)
+	QPresetXML(const QPresetXML& Other)
 	{
 		m_Name = Other.m_Name;
 

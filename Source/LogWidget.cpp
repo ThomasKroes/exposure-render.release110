@@ -89,9 +89,9 @@ QLogWidget::QLogWidget(QWidget* pParent /*= NULL*/) :
 	HeaderLabels << "time" << "" << "message";
 
 	setHorizontalHeaderLabels(HeaderLabels);
-	horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	horizontalHeader()->setResizeMode(1, QHeaderView::Fixed);
-	horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+	horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+	horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+	horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 	horizontalHeader()->resizeSection(1, 25);
 	horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 	horizontalHeader()->setVisible(false);

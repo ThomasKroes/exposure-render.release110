@@ -14,6 +14,11 @@
 #pragma once
 
 #include "Preset.h"
+#include "Logger.h"
+#include "Stable.h"
+#include <QFile>
+#include <QApplication>
+#include <QFileInfo>
 
 class QPresetsWidgetBase : public QGroupBox
 {
@@ -91,7 +96,10 @@ public:
 		for (int i = 0; i < m_Presets.size(); i++)
 		{
 			// Put pointer to preset in void pointer of variant
-			QVariant Variant = qVariantFromValue((void*)m_PresetItems[i]);
+			//QVariant Variant = qVariantFromValue((void*)m_PresetItems[i]);
+			
+			// NOTE See if this is the intended behaviour
+			QVariant Variant = qVariantFromValue((void*)&m_Presets[i]);
 
 			// Add the item
 			m_PresetName.addItem(m_Presets[i].GetName(), Variant);
@@ -172,7 +180,7 @@ public:
 		// File name + extension
 		QString FileName = QApplication::applicationDirPath() + "/" + m_InternalName + "Presets.xml";
 
-		Log(QString("Loading " + m_UserInterfaceName.toLower() + " presets from file: "+ QFileInfo(FileName).fileName()).toAscii());
+		Log(QString("Loading " + m_UserInterfaceName.toLower() + " presets from file: "+ QFileInfo(FileName).fileName()).toLatin1());
 
 		// Set the file name
 		if (ChoosePath)
@@ -188,7 +196,7 @@ public:
 		// Open the XML file for reading
 		if (!XmlFile.open(QIODevice::ReadOnly))
 		{
-			Log(QString("Failed to open " + QFileInfo(FileName).fileName() + " for reading: " + XmlFile.errorString()).toAscii(), QLogger::Critical);
+			Log(QString("Failed to open " + QFileInfo(FileName).fileName() + " for reading: " + XmlFile.errorString()).toLatin1(), QLogger::Critical);
 			return;
 		}
 
@@ -218,7 +226,8 @@ public:
 			m_Presets.append(NewPreset);
 
 			// Load the preset into it
-			m_Presets.back().ReadXML(Node.toElement());
+			auto var = Node.toElement();
+			m_Presets.back().ReadXML(var);
 		}
 
 		XmlFile.close();
@@ -238,7 +247,7 @@ public:
 		// File name + extension
 		QString FileName = QApplication::applicationDirPath() + "/" + m_InternalName + "Presets.xml";
 
-		Log(QString("Saving " + m_UserInterfaceName.toLower() + " presets to file: " + QFileInfo(FileName).fileName()).toAscii());
+		Log(QString("Saving " + m_UserInterfaceName.toLower() + " presets to file: " + QFileInfo(FileName).fileName()).toLatin1());
 
 		// Set the file name
 		if (ChoosePath)
@@ -254,7 +263,7 @@ public:
 		// Open the XML file for writing
 		if (!XmlFile.open(QIODevice::WriteOnly ))
 		{
-			Log(QString("Failed to open " + QFileInfo(FileName).fileName() + ".xml for writing: " + XmlFile.errorString()).toAscii(), QLogger::Critical);
+			Log(QString("Failed to open " + QFileInfo(FileName).fileName() + ".xml for writing: " + XmlFile.errorString()).toLatin1(), QLogger::Critical);
 			return;
 		}
 
@@ -296,7 +305,7 @@ public:
 		UpdatePresetsList();
 	};
 
-	void InsertPreset(const int& Index, T& Preset)
+	void InsertPreset(const int& Index, const T& Preset)
 	{
 		m_Presets.insert(Index, Preset);
 

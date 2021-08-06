@@ -59,9 +59,9 @@ CMainWindow::CMainWindow() :
 
 	QObject::connect(&gStatus, SIGNAL(RenderBegin()), this, SLOT(OnRenderBegin()));
 	QObject::connect(&gStatus, SIGNAL(RenderEnd()), this, SLOT(OnRenderEnd()));
-	QObject::connect(&m_HttpGet, SIGNAL(done()), this, SLOT(VersionInfoDownloaded()));
+	//QObject::connect(&m_HttpGet, SIGNAL(done()), this, SLOT(VersionInfoDownloaded()));
 
-	OnCheckForUpdates();
+	//OnCheckForUpdates();
 }
 
 CMainWindow::~CMainWindow(void)
@@ -252,7 +252,7 @@ void CMainWindow::Open(QString FilePath)
 	SetCurrentFile(FilePath);
 
 	// Make string suitable for VTK
-	FilePath.replace("/", "\\\\");
+	//FilePath.replace("/", "\\\\");
 
  	if (!FilePath.isEmpty())
  		StartRenderThread(FilePath);
@@ -358,7 +358,7 @@ void CMainWindow::VersionInfoDownloaded(void)
 
 	if (!XmlFile.open(QIODevice::ReadOnly))
 	{
-		Log(QString("Failed to open " + QFileInfo(FilePath).fileName() + " for reading: " + XmlFile.errorString()).toAscii(), QLogger::Critical);
+		Log(QString("Failed to open " + QFileInfo(FilePath).fileName() + " for reading: " + XmlFile.errorString()).toLatin1(), QLogger::Critical);
 		return;
 	}
 

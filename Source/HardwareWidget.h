@@ -18,7 +18,7 @@ class QCudaDevice
 public:
 	QCudaDevice(void){};
 
-	QCudaDevice& QCudaDevice::operator=(const QCudaDevice& Other)
+	QCudaDevice& operator=(const QCudaDevice& Other)
 	{
 		m_ID				= Other.m_ID;
 		m_Name				= Other.m_Name;

@@ -13,6 +13,10 @@
 
 #pragma once
 
+#include <QDialog>
+#include <QGridLayout>
+#include <QDialogButtonBox>
+
 class QAboutDialog : public QDialog
 {
 	Q_OBJECT

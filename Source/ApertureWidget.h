@@ -14,6 +14,8 @@
 #pragma once
 
 #include "Aperture.h"
+#include <QGroupBox>
+#include "Controls.h"
 
 class QApertureWidget : public QGroupBox
 {
