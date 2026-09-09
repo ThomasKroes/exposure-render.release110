@@ -34,7 +34,7 @@ public:
 	void			SetNoiseReduction(const bool& NoiseReduction);
 	bool			IsDirty(void) const;
 	void			UnDirty(void);
-	void			ReadXML(QDomElement& Parent);
+	void			ReadXML(const QDomElement& Parent);
 	QDomElement		WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

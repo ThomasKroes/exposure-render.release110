@@ -68,7 +68,7 @@ void QFocus::Reset(void)
 	emit Changed(*this);
 }
 
-void QFocus::ReadXML(QDomElement& Parent)
+void QFocus::ReadXML(const QDomElement& Parent)
 {
 	m_FocalDistance = Parent.firstChildElement("FocalDistance").attribute("Value").toFloat();
 }

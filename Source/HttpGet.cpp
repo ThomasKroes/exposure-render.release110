@@ -16,9 +16,9 @@
 #include "HttpGet.h"
 
 QHttpGet::QHttpGet(QObject* pParent /*= NULL*/) :
-	QObject(pParent)
+	QObject(pParent),
+	m_pReply(NULL)
 {
-    connect(&m_Http, SIGNAL(done(bool)), this, SLOT(HttpDone(bool)));
 }
 
 bool QHttpGet::GetFile(const QUrl& Url, const QString& FilePath)
@@ -29,9 +29,11 @@ bool QHttpGet::GetFile(const QUrl& Url, const QString& FilePath)
         return false;
     }
 
-    if (Url.scheme() != "http")
+	// QHttp only ever spoke plain HTTP; QNetworkAccessManager handles TLS, so
+	// accept https too rather than rejecting the scheme most hosts now require.
+    if (Url.scheme() != "http" && Url.scheme() != "https")
 	{
-        Log("Error: URL must start with 'http:'", "globe");
+        Log("Error: URL must start with 'http:' or 'https:'", "globe");
         return false;
     }
 
@@ -49,18 +51,27 @@ bool QHttpGet::GetFile(const QUrl& Url, const QString& FilePath)
         return false;
     }
 
-    m_Http.setHost(Url.host(), Url.port(80));
-    m_Http.get(Url.path(), &m_File);
-    m_Http.close();
+	m_pReply = m_Network.get(QNetworkRequest(Url));
+
+	connect(m_pReply, SIGNAL(finished()), this, SLOT(HttpDone()));
 
     return true;
 }
 
-void QHttpGet::HttpDone(bool Error)
+void QHttpGet::HttpDone(void)
 {
-    if (Error)
-		Log("Error: " + QString(m_Http.errorString()), QLogger::Critical);
+	if (!m_pReply)
+		return;
+
+	if (m_pReply->error() != QNetworkReply::NoError)
+		Log("Error: " + m_pReply->errorString(), QLogger::Critical);
+	else
+		m_File.write(m_pReply->readAll());
 
     m_File.close();
+
+	m_pReply->deleteLater();
+	m_pReply = NULL;
+
     emit done();
 }

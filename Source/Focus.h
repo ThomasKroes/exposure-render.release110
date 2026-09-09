@@ -29,7 +29,7 @@ public:
 	float		GetFocalDistance(void) const;
 	void		SetFocalDistance(const float& FocalDistance);
 	void		Reset(void);
-	void		ReadXML(QDomElement& Parent);
+	void		ReadXML(const QDomElement& Parent);
 	QDomElement	WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

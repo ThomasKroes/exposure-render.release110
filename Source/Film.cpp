@@ -102,7 +102,7 @@ void QFilm::UnDirty(void)
 	m_Dirty = false;
 }
 
-void QFilm::ReadXML(QDomElement& Parent)
+void QFilm::ReadXML(const QDomElement& Parent)
 {
 	SetWidth(Parent.firstChildElement("Width").attribute("Value").toFloat());
 	SetHeight(Parent.firstChildElement("Height").attribute("Value").toFloat());

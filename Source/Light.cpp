@@ -162,7 +162,7 @@ void QLight::SetIntensity(const float& Intensity)
 	emit LightPropertiesChanged(this);
 }
 
-void QLight::ReadXML(QDomElement& Parent)
+void QLight::ReadXML(const QDomElement& Parent)
 {
 	QPresetXML::ReadXML(Parent);
 

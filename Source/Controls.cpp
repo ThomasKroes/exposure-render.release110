@@ -226,7 +226,7 @@ void QDoubleSpinner::setValue(double Value, bool BlockSignals)
 	blockSignals(false);
 }
 
-QInputDialogEx::QInputDialogEx(QWidget* pParent /*= NULL*/, Qt::WindowFlags Flags /*= 0*/) :
+QInputDialogEx::QInputDialogEx(QWidget* pParent /*= NULL*/, Qt::WindowFlags Flags /*= Qt::WindowFlags()*/) :
 	QInputDialog(pParent, Flags)
 {
 	setWindowIcon(GetIcon("pencil-field"));

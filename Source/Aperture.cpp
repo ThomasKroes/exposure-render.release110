@@ -56,7 +56,7 @@ void QAperture::Reset(void)
 	emit Changed(*this);
 }
 
-void QAperture::ReadXML(QDomElement& Parent)
+void QAperture::ReadXML(const QDomElement& Parent)
 {
 	m_Size = Parent.firstChildElement("Size").attribute("Value").toFloat();
 }

@@ -60,10 +60,10 @@ QTFView::QTFView(QWidget* pParent /*= NULL*/) :
 	m_HistogramItem.setZValue(200);
 	m_TransferFunctionItem.setZValue(300);
 
- 	m_Background.translate(m_Margin.GetLeft(), m_Margin.GetTop());
-	m_Grid.translate(m_Margin.GetLeft(), m_Margin.GetTop());
- 	m_HistogramItem.translate(m_Margin.GetLeft(), m_Margin.GetTop());
-	m_TransferFunctionItem.translate(m_Margin.GetLeft(), m_Margin.GetTop());
+ 	m_Background.setPos(m_Margin.GetLeft(), m_Margin.GetTop());
+	m_Grid.setPos(m_Margin.GetLeft(), m_Margin.GetTop());
+ 	m_HistogramItem.setPos(m_Margin.GetLeft(), m_Margin.GetTop());
+	m_TransferFunctionItem.setPos(m_Margin.GetLeft(), m_Margin.GetTop());
 
 	QObject::connect(&gTransferFunction, SIGNAL(Changed()), this, SLOT(OnTransferFunctionChanged()));
 	QObject::connect(&gTransferFunction, SIGNAL(SelectionChanged(QNode*)), this, SLOT(OnNodeSelectionChanged(QNode*)));
@@ -88,7 +88,7 @@ void QTFView::resizeEvent(QResizeEvent* pResizeEvent)
 	setSceneRect(rect());
 }
 
-void QTFView::SetHistogram(QHistogram& Histogram)
+void QTFView::SetHistogram(const QHistogram& Histogram)
 {
 	m_HistogramItem.SetHistogram(Histogram);
 }
@@ -129,7 +129,7 @@ void QTFView::mousePressEvent(QMouseEvent* pEvent)
 	QGraphicsView::mousePressEvent(pEvent);
 
 	// Get node item under cursor
-	QNodeItem* pNodeItem = dynamic_cast<QNodeItem*>(scene()->itemAt(pEvent->posF() - QPointF(rect().left(), rect().top())));
+	QNodeItem* pNodeItem = dynamic_cast<QNodeItem*>(scene()->itemAt(pEvent->position() - QPointF(rect().left(), rect().top()), transform()));
 
 	if (!pNodeItem)
 	{
@@ -137,7 +137,7 @@ void QTFView::mousePressEvent(QMouseEvent* pEvent)
 		if (pEvent->button() == Qt::LeftButton && m_CanvasRectangle.contains(pEvent->pos()))
 		{
 			// Convert picked position to transfer function coordinates
-			QPointF TransferFunctionPoint((pEvent->posF().x() - m_Margin.GetLeft()) / m_CanvasRectangle.width(), (pEvent->posF().y() - m_Margin.GetTop()) / m_CanvasRectangle.height());
+			QPointF TransferFunctionPoint((pEvent->position().x() - m_Margin.GetLeft()) / m_CanvasRectangle.width(), (pEvent->position().y() - m_Margin.GetTop()) / m_CanvasRectangle.height());
 
 			// Create new transfer function node
 			QNode NewNode(&gTransferFunction, TransferFunctionPoint.x(), 1.0f - TransferFunctionPoint.y(), QColor::fromHsl((int)(((float)rand() / (float)RAND_MAX) * 359.0f), 150, 150), QColor::fromHsl(0, 0, 50), QColor::fromHsl(0, 0, 0));

@@ -63,7 +63,7 @@ QTransferFunction& QTransferFunction::operator = (const QTransferFunction& Other
 	// Notify others that the function has changed selection has changed
 	emit Changed();
 
-	SetSelectedNode(NULL);
+	SetSelectedNode((QNode*)nullptr);
 
 	return *this;
 }
@@ -180,7 +180,7 @@ void QTransferFunction::AddNode(const QNode& Node)
 	QNode& CacheNode = m_Nodes.back();
 
 	// Sort the transfer function nodes based on intensity
-	qSort(m_Nodes.begin(), m_Nodes.end(), CompareNodes);
+	std::sort(m_Nodes.begin(), m_Nodes.end(), CompareNodes);
 
 	// Update ID's
 	for (int i = 0; i < m_Nodes.size(); i++)
@@ -217,7 +217,7 @@ void QTransferFunction::RemoveNode(QNode* pNode)
 	int NodeIndex = m_Nodes.indexOf(*pNode);
 
 	// Remove from list and memory
-	m_Nodes.remove(*pNode);
+	m_Nodes.removeAll(*pNode);
 
 	// Update ID's
 	for (int i = 0; i < m_Nodes.size(); i++)
@@ -320,7 +320,7 @@ void QTransferFunction::SetGradientFactor(const float& GradientFactor)
 	emit Changed();
 }
 
-void QTransferFunction::ReadXML(QDomElement& Parent)
+void QTransferFunction::ReadXML(const QDomElement& Parent)
 {
 	QPresetXML::ReadXML(Parent);
 

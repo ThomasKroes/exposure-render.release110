@@ -358,7 +358,7 @@ void CMainWindow::VersionInfoDownloaded(void)
 
 	if (!XmlFile.open(QIODevice::ReadOnly))
 	{
-		Log(QString("Failed to open " + QFileInfo(FilePath).fileName() + " for reading: " + XmlFile.errorString()).toAscii(), QLogger::Critical);
+		Log(QString("Failed to open " + QFileInfo(FilePath).fileName() + " for reading: " + XmlFile.errorString()).toUtf8(), QLogger::Critical);
 		return;
 	}
 

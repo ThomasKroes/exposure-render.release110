@@ -135,7 +135,7 @@ void QCamera::SetUp(const Vec3f& Up)
 	emit Changed();
 }
 
-void QCamera::ReadXML(QDomElement& Parent)
+void QCamera::ReadXML(const QDomElement& Parent)
 {
 	QPresetXML::ReadXML(Parent);
 

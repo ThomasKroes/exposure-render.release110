@@ -54,7 +54,7 @@ public:
 	void resizeEvent(QResizeEvent* pResizeEvent);
 	void mousePressEvent(QMouseEvent* pEvent);
 
-	void SetHistogram(QHistogram& Histogram);
+	void SetHistogram(const QHistogram& Histogram);
 	void setEnabled(bool Enabled);
 
 public slots:

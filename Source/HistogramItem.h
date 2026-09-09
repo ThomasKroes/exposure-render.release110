@@ -23,7 +23,7 @@ public:
 	QHistogramItem(const QHistogramItem& Other);
 	QHistogramItem& operator = (const QHistogramItem& Other);
 
-	void	SetHistogram(QHistogram& Histogram);
+	void	SetHistogram(const QHistogram& Histogram);
 	void	Update(void);
 
 public:

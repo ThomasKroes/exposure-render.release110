@@ -40,7 +40,7 @@ public:
 	QString		GetFile(void) const;
 	void		SetFile(const QString& File);
 
-	void		ReadXML(QDomElement& Parent);
+	void		ReadXML(const QDomElement& Parent);
 	QDomElement	WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

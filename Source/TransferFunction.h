@@ -46,7 +46,7 @@ public:
 	void						SetShadingType(const int& ShadingType);
 	float						GetGradientFactor(void) const;
 	void						SetGradientFactor(const float& GradientFactor);
-	void						ReadXML(QDomElement& Parent);
+	void						ReadXML(const QDomElement& Parent);
 	QDomElement					WriteXML(QDomDocument& DOM, QDomElement& Parent);
 	static QTransferFunction	Default(void);
 

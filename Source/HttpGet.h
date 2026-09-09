@@ -26,9 +26,10 @@ signals:
     void done();
 
 private slots:
-    void HttpDone(bool Error);
+    void HttpDone(void);
 
 private:
-    QHttp	m_Http;
-    QFile	m_File;
+    QNetworkAccessManager	m_Network;
+    QNetworkReply*			m_pReply;
+    QFile					m_File;
 };

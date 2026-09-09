@@ -27,7 +27,7 @@ public:
 	float			GetFieldOfView(void) const;
 	void			SetFieldOfView(const float& FieldOfView);
 	void			Reset(void);
-	void			ReadXML(QDomElement& Parent);
+	void			ReadXML(const QDomElement& Parent);
 	QDomElement		WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

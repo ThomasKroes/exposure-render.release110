@@ -38,9 +38,9 @@ QStatisticsWidget::QStatisticsWidget(QWidget* pParent) :
 	setHeaderLabels(ColumnNames);
 
 	// Configure headers
-//	header()->setResizeMode(0, QHeaderView::ResizeToContents);
-//	header()->setResizeMode(1, QHeaderView::ResizeToContents);
-//	header()->setResizeMode(2, QHeaderView::ResizeToContents);
+//	header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+//	header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+//	header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 	header()->resizeSection(0, 260);
 	header()->resizeSection(1, 150);
 	header()->resizeSection(2, 100);

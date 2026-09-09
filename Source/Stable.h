@@ -14,8 +14,9 @@
 #pragma once
 
 #include <QtGui>
+#include <QtWidgets>
+#include <QtNetwork>
 #include <QtXml/qdom.h>
-#include <QHttp>
 
 #include "Utilities.h"
 #include "Logger.h"
@@ -23,7 +24,7 @@
 #include "Controls.h"
 #include "CudaUtilities.h"
 
-inline void ReadVectorElement(QDomElement& Parent, const QString& Name, float& X, float& Y, float& Z)
+inline void ReadVectorElement(const QDomElement& Parent, const QString& Name, float& X, float& Y, float& Z)
 {
 	X = Parent.firstChildElement(Name).attribute("X").toFloat();
 	Y = Parent.firstChildElement(Name).attribute("Y").toFloat();

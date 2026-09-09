@@ -262,7 +262,7 @@ void QNode::SetDirty(const bool& Dirty)
 	m_Dirty = Dirty;
 }
 
-void QNode::ReadXML(QDomElement& Parent)
+void QNode::ReadXML(const QDomElement& Parent)
 {
 	// Intensity
 	m_Intensity = Parent.firstChildElement("NormalizedIntensity").attribute("Value").toFloat();

@@ -56,7 +56,7 @@ void QProjection::Reset(void)
 	emit Changed(*this);
 }
 
-void QProjection::ReadXML(QDomElement& Parent)
+void QProjection::ReadXML(const QDomElement& Parent)
 {
 	m_FieldOfView = Parent.firstChildElement("FieldOfView").attribute("Value").toFloat();
 }

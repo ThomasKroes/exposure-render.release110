@@ -51,7 +51,7 @@ QHistogramItem& QHistogramItem::operator=(const QHistogramItem& Other)
 	return *this;
 }
 
-void QHistogramItem::SetHistogram(QHistogram& Histogram)
+void QHistogramItem::SetHistogram(const QHistogram& Histogram)
 {
 	m_Histogram = Histogram;
 	Update();

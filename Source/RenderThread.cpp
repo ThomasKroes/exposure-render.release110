@@ -352,20 +352,20 @@ bool QRenderThread::Load(QString& FileName)
 
 	if (!FileInfo.exists())
 	{
-		Log(QString(QFileInfo(FileName).filePath().replace("//", "/")).toAscii() + "  does not exist!", QLogger::Critical);
+		Log(QString(QFileInfo(FileName).filePath().replace("//", "/")).toUtf8() + "  does not exist!", QLogger::Critical);
 		return false;
 	}
 
-	Log(QString("Loading " + QFileInfo(FileName).fileName()).toAscii());
+	Log(QString("Loading " + QFileInfo(FileName).fileName()).toUtf8());
 
 	// Exit if the reader can't read the file
-	if (!MetaImageReader->CanReadFile(m_FileName.toAscii()))
+	if (!MetaImageReader->CanReadFile(m_FileName.toUtf8()))
 	{
-		Log(QString("Meta image reader can't read file " + QFileInfo(FileName).fileName()).toAscii(), QLogger::Critical);
+		Log(QString("Meta image reader can't read file " + QFileInfo(FileName).fileName()).toUtf8(), QLogger::Critical);
 		return false;
 	}
 
-	MetaImageReader->SetFileName(m_FileName.toAscii());
+	MetaImageReader->SetFileName(m_FileName.toUtf8());
 
 	MetaImageReader->Update();
 

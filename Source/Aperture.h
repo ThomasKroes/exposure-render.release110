@@ -27,7 +27,7 @@ public:
 	float			GetSize(void) const;
 	void			SetSize(const float& Size);
 	void			Reset(void);
-	void			ReadXML(QDomElement& Parent);
+	void			ReadXML(const QDomElement& Parent);
 	QDomElement		WriteXML(QDomDocument& DOM, QDomElement& Parent);
 
 signals:

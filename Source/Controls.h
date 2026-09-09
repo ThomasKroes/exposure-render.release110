@@ -110,7 +110,7 @@ public:
 class QInputDialogEx : public QInputDialog
 {
 public:
-	QInputDialogEx(QWidget* pParent = NULL, Qt::WindowFlags Flags = 0);
+	QInputDialogEx(QWidget* pParent = NULL, Qt::WindowFlags Flags = Qt::WindowFlags());
 
 	virtual QSize sizeHint() const;
 };

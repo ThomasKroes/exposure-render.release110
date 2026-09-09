@@ -50,7 +50,7 @@ void QPresetXML::SetDirty(const bool& Dirty /*= true*/)
 	m_Dirty = Dirty;
 }
 
-void QPresetXML::ReadXML(QDomElement& Parent)
+void QPresetXML::ReadXML(const QDomElement& Parent)
 {
 	SetName(Parent.attribute("Name"));
 }
