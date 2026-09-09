@@ -379,7 +379,7 @@ bool QRenderThread::Load(QString& FileName)
 	
 	Log("Casting volume data type to short", "grid");
 
-	ImageCast->SetInput(MetaImageReader->GetOutput());
+	ImageCast->SetInputData(MetaImageReader->GetOutput());
 	ImageCast->SetOutputScalarTypeToShort();
 	ImageCast->Update();
 
@@ -433,7 +433,7 @@ bool QRenderThread::Load(QString& FileName)
 	Log("Creating gradient magnitude volume", "grid");
 		
 	GradientMagnitude->SetDimensionality(3);
-	GradientMagnitude->SetInput(ImageCast->GetOutput());
+	GradientMagnitude->SetInputData(ImageCast->GetOutput());
 	GradientMagnitude->Update();
 
 	vtkImageData* GradientMagnitudeBuffer = GradientMagnitude->GetOutput();

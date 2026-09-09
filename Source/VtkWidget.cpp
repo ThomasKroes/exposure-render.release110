@@ -77,7 +77,7 @@ CVtkWidget::CVtkWidget(QWidget* pParent) :
 	SetupRenderView();
 }
 
-QVTKWidget* CVtkWidget::GetQtVtkWidget(void)
+QVTKOpenGLNativeWidget* CVtkWidget::GetQtVtkWidget(void)
 {
 	return &m_QtVtkWidget;
 }
@@ -101,7 +101,7 @@ void CVtkWidget::OnRenderBegin(void)
 	m_ImageImport->Update();
 
 	m_ImageActor->SetInterpolate(1);
-	m_ImageActor->SetInput(m_ImageImport->GetOutput());
+	m_ImageActor->SetInputData(m_ImageImport->GetOutput());
 	m_ImageActor->SetScale(1, -1, -1);
 	m_ImageActor->VisibilityOn();
 
@@ -131,8 +131,13 @@ void CVtkWidget::SetupRenderView(void)
 	m_SceneRenderer->GetActiveCamera()->SetFocalPoint(0.0, 0.0, 0.0);
 	m_SceneRenderer->GetActiveCamera()->ParallelProjectionOn();
 
-	// Get render window and configure
-	m_RenderWindow = GetQtVtkWidget()->GetRenderWindow();
+	// Create the render window and hand it to the Qt widget. QVTKWidget used to
+	// own one implicitly; QVTKOpenGLNativeWidget expects the caller to supply a
+	// vtkGenericOpenGLRenderWindow, and creates the interactor from it.
+	vtkSmartPointer<vtkGenericOpenGLRenderWindow> RenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+	GetQtVtkWidget()->setRenderWindow(RenderWindow);
+
+	m_RenderWindow = RenderWindow;
 	m_RenderWindow->AddRenderer(m_SceneRenderer);
 
 	// Key press callback
@@ -179,7 +184,7 @@ void CVtkWidget::OnRenderLoopTimer(void)
 	m_ImageImport->SetDataExtentToWholeExtent();
 	m_ImageImport->Update();
 	
-	m_ImageActor->SetInput(m_ImageImport->GetOutput());
+	m_ImageActor->SetInputData(m_ImageImport->GetOutput());
 
 	m_RenderWindow->GetInteractor()->Render();
 }
