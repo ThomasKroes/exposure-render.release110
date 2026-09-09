@@ -59,7 +59,6 @@ find_package(VTK REQUIRED COMPONENTS
     CommonCore
     CommonDataModel
     CommonExecutionModel
-    FiltersExtraction
     FiltersSources
     GUISupportQt
     ImagingCore

@@ -16,7 +16,6 @@
 #include "Geometry.h"
 #include "Scene.h"
 #include "CudaUtilities.h"
-#include "cutil_math.h"
 
 #define KRNL_BLUR_BLOCK_W		16
 #define KRNL_BLUR_BLOCK_H		8
@@ -100,10 +99,10 @@ void Blur(CScene* pScene, CScene* pDevScene, CCudaView* pDevView)
 	const dim3 KernelGrid((int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResX() / (float)KernelBlock.x), (int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResY() / (float)KernelBlock.y));
 
 	KrnlBlurH<<<KernelGrid, KernelBlock>>>(pDevView);
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 	HandleCudaKernelError(cudaGetLastError(), "Blur Estimate H");
 	
 	KrnlBlurV<<<KernelGrid, KernelBlock>>>(pDevView);
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 	HandleCudaKernelError(cudaGetLastError(), "Blur Estimate V");
 }

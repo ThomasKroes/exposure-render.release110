@@ -36,7 +36,6 @@
 #include <vtkImageShiftScale.h>
 #include <vtkErrorCode.h>
 #include <vtkImageGradient.h>
-#include <vtkExtractVectorComponents.h>
 
 // Render thread
 QRenderThread* gpRenderThread = NULL;

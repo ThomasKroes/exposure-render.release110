@@ -22,36 +22,36 @@ DEV inline Vec3f ToVec3f(const float3& V)
 
 DEV float GetNormalizedIntensity(const Vec3f& P)
 {
-	const float Intensity = ((float)SHRT_MAX * tex3D(gTexDensity, P.x * gInvAaBbMax.x, P.y * gInvAaBbMax.y, P.z * gInvAaBbMax.z));
+	const float Intensity = ((float)SHRT_MAX * tex3D<float>(gTexDensity, P.x * gInvAaBbMax.x, P.y * gInvAaBbMax.y, P.z * gInvAaBbMax.z));
 
 	return (Intensity - gIntensityMin) * gIntensityInvRange;
 }
 
 DEV float GetOpacity(const float& NormalizedIntensity)
 {
-	return tex1D(gTexOpacity, NormalizedIntensity);
+	return tex1D<float>(gTexOpacity, NormalizedIntensity);
 }
 
 DEV CColorRgbHdr GetDiffuse(const float& NormalizedIntensity)
 {
-	float4 Diffuse = tex1D(gTexDiffuse, NormalizedIntensity);
+	float4 Diffuse = tex1D<float4>(gTexDiffuse, NormalizedIntensity);
 	return CColorRgbHdr(Diffuse.x, Diffuse.y, Diffuse.z);
 }
 
 DEV CColorRgbHdr GetSpecular(const float& NormalizedIntensity)
 {
-	float4 Specular = tex1D(gTexSpecular, NormalizedIntensity);
+	float4 Specular = tex1D<float4>(gTexSpecular, NormalizedIntensity);
 	return CColorRgbHdr(Specular.x, Specular.y, Specular.z);
 }
 
 DEV float GetRoughness(const float& NormalizedIntensity)
 {
-	return tex1D(gTexRoughness, NormalizedIntensity);
+	return tex1D<float>(gTexRoughness, NormalizedIntensity);
 }
 
 DEV CColorRgbHdr GetEmission(const float& NormalizedIntensity)
 {
-	float4 Emission = tex1D(gTexEmission, NormalizedIntensity);
+	float4 Emission = tex1D<float4>(gTexEmission, NormalizedIntensity);
 	return CColorRgbHdr(Emission.x, Emission.y, Emission.z);
 }
 
@@ -68,7 +68,7 @@ DEV inline Vec3f NormalizedGradient(const Vec3f& P)
 
 DEV float GradientMagnitude(const Vec3f& P)
 {
-	return ((float)SHRT_MAX * tex3D(gTexGradientMagnitude, P.x * gInvAaBbMax.x, P.y * gInvAaBbMax.y, P.z * gInvAaBbMax.z));
+	return ((float)SHRT_MAX * tex3D<float>(gTexGradientMagnitude, P.x * gInvAaBbMax.x, P.y * gInvAaBbMax.y, P.z * gInvAaBbMax.z));
 }
 
 DEV bool NearestLight(CScene* pScene, CRay R, CColorXyz& LightColor, Vec3f& Pl, CLight*& pLight, float* pPdf = NULL)

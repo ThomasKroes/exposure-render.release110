@@ -96,6 +96,6 @@ void SingleScattering(CScene* pScene, CScene* pDevScene, CCudaView* pView)
 	const dim3 KernelGrid((int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResX() / (float)KernelBlock.x), (int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResY() / (float)KernelBlock.y));
 	
 	KrnlSingleScattering<<<KernelGrid, KernelBlock>>>(pDevScene, pView);
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 	HandleCudaKernelError(cudaGetLastError(), "Single Scattering");
 }

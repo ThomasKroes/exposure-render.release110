@@ -56,7 +56,7 @@ DEV inline bool SampleDistanceRM(CRay& R, CRNG& RNG, Vec3f& Ps)
 	return true;
 }
 
-DEV inline bool FreePathRM(CRay& R, CRNG& RNG)
+DEV inline bool FreePathRM(const CRay& R, CRNG& RNG)
 {
 	const int TID = threadIdx.y * blockDim.x + threadIdx.x;
 

@@ -162,7 +162,11 @@ void QCudaDevicesModel::EnumerateDevices(void)
 		CudaDevice.m_Capability			= QString::number(DeviceProperties.major) + "." + QString::number(DeviceProperties.minor);
 		CudaDevice.m_GlobalMemory		= QString::number((float)DeviceProperties.totalGlobalMem / powf(1024.0f, 2.0f)) + "MB";
 		CudaDevice.m_NoMultiProcessors	= QString::number(DeviceProperties.multiProcessorCount);
-		CudaDevice.m_GpuClockSpeed		= QString::number(DeviceProperties.clockRate * 1e-6f, 'f', 2) + "GHz";
+		// cudaDeviceProp::clockRate was removed in CUDA 13; query the attribute instead.
+		int ClockRate = 0;
+		HandleCudaError(cudaDeviceGetAttribute(&ClockRate, cudaDevAttrClockRate, DeviceID));
+
+		CudaDevice.m_GpuClockSpeed		= QString::number(ClockRate * 1e-6f, 'f', 2) + "GHz";
 
 		AddDevice(CudaDevice);
 	}

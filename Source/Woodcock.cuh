@@ -109,7 +109,7 @@ DEV inline bool SampleDistanceDdaWoodcock(CRay R, CRNG& RNG, Vec3f& P, CScene* p
   
  bool virtualHit = true;
   while(virtualHit) {
-    float sigmaMax = tex3D(gTexExtinction, photon.origin.x, photon.origin.y, photon.origin.z) / 255.0f;//tex1D(texTt, photon.photonEnergy);
+    float sigmaMax = tex3D<float>(gTexExtinction, photon.origin.x, photon.origin.y, photon.origin.z) / 255.0f;//tex1D(texTt, photon.photonEnergy);
     float lastSigmaMax = sigmaMax;
     float ds = min(t.x, min(t.y, t.z));
     float sigmaSum = sigmaMax * ds;
@@ -151,7 +151,7 @@ DEV inline bool SampleDistanceDdaWoodcock(CRay R, CRNG& RNG, Vec3f& P, CScene* p
       sigmaSum += ds * sigmaMax;
       lastSigmaMax = sigmaMax;
       float3 ePos = (exit + entry) / 2.0f;
-      sigmaMax = tex3D(gTexExtinction, ePos.x, ePos.y, ePos.z) / 255.0f;//tex1D(texTt, photon.photonEnergy);
+      sigmaMax = tex3D<float>(gTexExtinction, ePos.x, ePos.y, ePos.z) / 255.0f;//tex1D(texTt, photon.photonEnergy);
       samplePos = entry;
     }
 
@@ -165,7 +165,7 @@ DEV inline bool SampleDistanceDdaWoodcock(CRay R, CRNG& RNG, Vec3f& P, CScene* p
       return false;
     }
 
-    if((tex3D(gTexDensity, samplePos.x, samplePos.y, samplePos.z) / 255.0f) / (tex3D(gTexExtinction, samplePos.x, samplePos.y, samplePos.z) / 255.0f) > RNG.Get1()){
+    if((tex3D<float>(gTexDensity, samplePos.x, samplePos.y, samplePos.z) / 255.0f) / (tex3D<float>(gTexExtinction, samplePos.x, samplePos.y, samplePos.z) / 255.0f) > RNG.Get1()){
       virtualHit = false;
     } else {
       photon.origin = samplePos;

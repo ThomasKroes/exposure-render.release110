@@ -130,7 +130,7 @@ public:
 			return &m_pData[Y * GetWidth() + X];
 	}
 
-	HOD void Set(T& Value, const int& X = 0, const int& Y = 0)
+	HOD void Set(const T& Value, const int& X = 0, const int& Y = 0)
 	{
 		if (X > GetWidth() || Y > GetHeight())
 			return;

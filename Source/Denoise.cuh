@@ -40,7 +40,7 @@ KERNEL void KrnlDenoise(CCudaView* pView)
     const float x = (float)X + 0.5f;
     const float y = (float)Y + 0.5f;
 
-	const float4 clr00 = tex2D(gTexRunningEstimateRgba, x, y);
+	const float4 clr00 = tex2D<float4>(gTexRunningEstimateRgba, x, y);
 	
 	if (gDenoiseEnabled && gDenoiseLerpC > 0.0f && gDenoiseLerpC < 1.0f)
 	{
@@ -52,7 +52,7 @@ KERNEL void KrnlDenoise(CCudaView* pView)
 		{
             for (float j = -gDenoiseWindowRadius; j <= gDenoiseWindowRadius; j++)
             {
-                const float4 clrIJ = tex2D(gTexRunningEstimateRgba, x + j, y + i);
+                const float4 clrIJ = tex2D<float4>(gTexRunningEstimateRgba, x + j, y + i);
                 const float distanceIJ = vecLen(clr00, clrIJ);
 
                 const float weightIJ = __expf(-(distanceIJ * gDenoiseNoise + (i * i + j * j) * gDenoiseInvWindowArea));
@@ -94,6 +94,6 @@ void Denoise(CScene* pScene, CScene* pDevScene, CCudaView* pDevView)
 	const dim3 KernelGrid((int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResX() / (float)KernelBlock.x), (int)ceilf((float)pScene->m_Camera.m_Film.m_Resolution.GetResY() / (float)KernelBlock.y));
 
 	KrnlDenoise<<<KernelGrid, KernelBlock>>>(pDevView);
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 	HandleCudaKernelError(cudaGetLastError(), "Noise Reduction");
 }

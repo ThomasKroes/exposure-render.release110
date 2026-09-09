@@ -46,7 +46,7 @@ float NearestIntersection(CScene* pDevScene)
 
 	KrnlNearestIntersection<<<KernelGrid, KernelBlock>>>(pDevScene, pDevT);
 	HandleCudaError(cudaGetLastError());
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 
 	HandleCudaError(cudaMemcpy(&T, pDevT, sizeof(float), cudaMemcpyDeviceToHost));
 	HandleCudaError(cudaFree(pDevT));

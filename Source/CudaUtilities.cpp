@@ -181,7 +181,11 @@ int GetMaxGigaFlopsDeviceID(void)
 			sm_per_multiproc = _ConvertSMVer2Cores(deviceProp.major, deviceProp.minor);
 		}
 
-		int compute_perf  = deviceProp.multiProcessorCount * sm_per_multiproc * deviceProp.clockRate;
+		// cudaDeviceProp::clockRate was removed in CUDA 13; query the attribute instead.
+		int clock_rate = 0;
+		cudaDeviceGetAttribute(&clock_rate, cudaDevAttrClockRate, current_device);
+
+		int compute_perf  = deviceProp.multiProcessorCount * sm_per_multiproc * clock_rate;
 		if( compute_perf  > max_compute_perf ) {
             // If we find GPU with SM major > 2, search only these
 			if ( best_SM_arch > 2 ) {

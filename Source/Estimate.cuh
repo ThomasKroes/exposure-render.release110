@@ -36,6 +36,6 @@ void Estimate(CScene* pScene, CScene* pDevScene, CCudaView* pDevView)
 	const dim3 KernelGrid((int)ceilf((float)pScene->m_Camera.m_Film.GetWidth() / (float)KernelBlock.x), (int)ceilf((float)pScene->m_Camera.m_Film.GetHeight() / (float)KernelBlock.y));
 
 	KrnlEstimate<<<KernelGrid, KernelBlock>>>(pDevView);
-	cudaThreadSynchronize();
+	cudaDeviceSynchronize();
 	HandleCudaKernelError(cudaGetLastError(), "Compute Estimate");
 }
