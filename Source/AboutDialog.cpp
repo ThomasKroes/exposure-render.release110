@@ -47,7 +47,7 @@ QAboutDialog::QAboutDialog(QWidget* pParent /*= NULL*/) :
 	AboutString += "<ul>";
 		AboutString += "<b><li>VTK</b>The <a href='http://www.vtk.org/'>Visualization Toolkit</a> (VTK) is an open-source, freely available software system for 3D computer graphics, image processing and visualization</li><br>";
 		AboutString += "<b><li>Fugue Icons</b>The <a href='http://code.google.com/p/fugue-icons-src/'>Fugue Icons</a> library comprises a comprehensive database of icons</li><br>";
-		AboutString += "<b><li>Cuda</b><a href='http://www.nvidia.com/object/cuda_home_new.html'>CUDA™</a> is NVIDIA's parallel computing architecture. It enables dramatic increases in computing performance by harnessing the power of the GPU</li><br>";
+		AboutString += "<b><li>Cuda</b><a href='http://www.nvidia.com/object/cuda_home_new.html'>CUDA&trade;</a> is NVIDIA's parallel computing architecture. It enables dramatic increases in computing performance by harnessing the power of the GPU</li><br>";
 		AboutString += "<b><li>Qt</b>The <a href='http://qt.nokia.com/products/'>Qt SDK</a> combines the Qt framework with tools designed to streamline the creation of applications for Symbian and Maemo, MeeGo (Nokia N9) in addition to desktop platforms, such as Microsoft Windows, Mac OS X, and Linux</li><br>";
 	AboutString += "</ul>";
 	AboutString += "<br>";

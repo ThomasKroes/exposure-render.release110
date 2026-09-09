@@ -20,7 +20,7 @@ class QHistogramItem : public QGraphicsRectItem
 public:
 	QHistogramItem(QGraphicsItem* pParent);
 	virtual ~QHistogramItem(void);
-	QHistogramItem::QHistogramItem(const QHistogramItem& Other);
+	QHistogramItem(const QHistogramItem& Other);
 	QHistogramItem& operator = (const QHistogramItem& Other);
 
 	void	SetHistogram(QHistogram& Histogram);

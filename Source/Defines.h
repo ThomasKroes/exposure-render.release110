@@ -13,12 +13,14 @@
 
 #pragma once
 
-#include <host_defines.h>
+#include <cuda_runtime.h>
 #include <float.h>
 
-#pragma warning(disable : 4244)
-#pragma warning(disable : 4251)
-#pragma warning(disable : 4297)
+#ifdef _MSC_VER
+	#pragma warning(disable : 4244)
+	#pragma warning(disable : 4251)
+	#pragma warning(disable : 4297)
+#endif
 
 #define HO													__host__
 #define DEV													__device__

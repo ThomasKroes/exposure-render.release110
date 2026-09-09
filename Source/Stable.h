@@ -14,7 +14,7 @@
 #pragma once
 
 #include <QtGui>
-#include <QtXml\qdom.h>
+#include <QtXml/qdom.h>
 #include <QHttp>
 
 #include "Utilities.h"

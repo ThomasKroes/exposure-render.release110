@@ -13,8 +13,12 @@
 
 #pragma once
 
-#ifdef _EXPORTING
-	#define EXPOSURE_RENDER_DLL    __declspec(dllexport)
+#ifdef _MSC_VER
+	#ifdef _EXPORTING
+		#define EXPOSURE_RENDER_DLL    __declspec(dllexport)
+	#else
+		#define EXPOSURE_RENDER_DLL    __declspec(dllimport)
+	#endif
 #else
-	#define EXPOSURE_RENDER_DLL    __declspec(dllimport)
+	#define EXPOSURE_RENDER_DLL
 #endif

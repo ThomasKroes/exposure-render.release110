@@ -23,9 +23,9 @@ public:
 	QLight(QObject* pParent = NULL);
 	virtual ~QLight(void);
 
-	QLight::QLight(const QLight& Other);
+	QLight(const QLight& Other);
 	
-	QLight& QLight::operator=(const QLight& Other);
+	QLight& operator=(const QLight& Other);
 
 	bool operator == (const QLight& Other) const;
 

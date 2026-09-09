@@ -376,7 +376,7 @@ public:
 	}
 
 	// ToDo: Add description
-	HOD CColorXyz& CColorXyz::operator=(const CColorXyz& Other)
+	HOD CColorXyz& operator=(const CColorXyz& Other)
 	{
 		for (int i = 0; i < gNoSamplesSpectrumXYZ; ++i)
 			c[i] = Other.c[i];
@@ -635,7 +635,7 @@ public:
 	}
 
 	// ToDo: Add description
-	HOD CColorXyza& CColorXyza::operator=(const CColorXyza& Other)
+	HOD CColorXyza& operator=(const CColorXyza& Other)
 	{
 		for (int i = 0; i < gNoSamplesSpectrumXYZ; ++i)
 			c[i] = Other.c[i];

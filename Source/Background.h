@@ -21,9 +21,9 @@ class QBackground : public QPresetXML
 
 public:
 	QBackground(QObject* pParent = NULL);
-	QBackground::QBackground(const QBackground& Other);
+	QBackground(const QBackground& Other);
 	virtual ~QBackground(void);
-	QBackground& QBackground::operator=(const QBackground& Other);
+	QBackground& operator=(const QBackground& Other);
 
 	bool		GetEnabled(void) const;
 	void		SetEnabled(const bool& Enable);

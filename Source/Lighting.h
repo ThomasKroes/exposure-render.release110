@@ -25,9 +25,9 @@ public:
 	QLighting(QObject* pParent = NULL);
 	virtual ~QLighting(void);
 
-	QLighting::QLighting(const QLighting& Other);
+	QLighting(const QLighting& Other);
 
-	QLighting& QLighting::operator=(const QLighting& Other);
+	QLighting& operator=(const QLighting& Other);
 	
 	void				AddLight(QLight& Light);
 	void				RemoveLight(QLight* pLight);

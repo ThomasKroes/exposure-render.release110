@@ -16,6 +16,8 @@
 #include "Spectrum.h"
 
 #include <algorithm>
+#include <cstdio>
+#include <cstring>
 #include <math.h>
 
 class CColorRgbHdr;
@@ -1517,7 +1519,7 @@ public:
 	}
 
 	// ToDo: Add description
-	HOD CResolution2D& CResolution2D::operator=(const CResolution2D& Other)
+	HOD CResolution2D& operator=(const CResolution2D& Other)
 	{
 		m_XY				= Other.m_XY;
 		m_InvXY				= Other.m_InvXY;
@@ -1603,7 +1605,7 @@ public:
 	}
 
 	// ToDo: Add description
-	HOD CResolution3D& CResolution3D::operator=(const CResolution3D& Other)
+	HOD CResolution3D& operator=(const CResolution3D& Other)
 	{
 		m_XYZ				= Other.m_XYZ;
 		m_InvXYZ			= Other.m_InvXYZ;

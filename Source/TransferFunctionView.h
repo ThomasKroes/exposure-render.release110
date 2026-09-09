@@ -31,7 +31,7 @@ public:
 	{
 	}
 
-	virtual void QAxisLabel::paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = NULL)
+	virtual void paint(QPainter* pPainter, const QStyleOptionGraphicsItem* pOption, QWidget* pWidget = NULL)
     {
 		// Use anti aliasing
 		pPainter->setRenderHints(QPainter::Antialiasing);
