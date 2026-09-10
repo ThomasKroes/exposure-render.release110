@@ -30,7 +30,20 @@ int main(int ArgumentCount, char* pArgv[])
 	Application.setStyle("Fusion");
 	Application.setOrganizationName("TU Delft");
 	Application.setApplicationName("Exposure Render");
-	
+	Application.setApplicationVersion("1.1.0");
+
+	// An optional volume to open on startup, so the renderer can be launched
+	// from a script or a desktop shortcut: ExposureRender <volume.mhd>
+	QCommandLineParser Parser;
+
+	Parser.setApplicationDescription("Direct volume rendering with physically based lighting.");
+	Parser.addHelpOption();
+	Parser.addVersionOption();
+	Parser.addPositionalArgument("volume", "Meta image volume (.mhd) to open on startup.");
+	Parser.process(Application);
+
+	const QStringList Volumes = Parser.positionalArguments();
+
 	// Application settings
 	QSettings Settings;
 
@@ -57,9 +70,16 @@ int main(int ArgumentCount, char* pArgv[])
 	// Override the application setting to enforce the display of the startup dialog
 	Settings.setValue("startup/dialog/show", QVariant(true));
 
-	// Show startup dialog
-	if (Settings.value("startup/dialog/show").toBool() == true)
+	if (!Volumes.isEmpty())
+	{
+		// A volume was named on the command line, so go straight to it rather
+		// than asking which demo to open.
+		MainWindow.Open(Volumes.first());
+	}
+	else if (Settings.value("startup/dialog/show").toBool() == true)
+	{
 		MainWindow.ShowStartupDialog();
+	}
 
 	// Execute the application
 	int Result = Application.exec();
