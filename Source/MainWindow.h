@@ -46,6 +46,11 @@ public slots:
 	void OnCheckForUpdates(void);
 	void VersionInfoDownloaded(void);
 
+private:
+	static QString						VersionInfoPath(void);
+
+public slots:
+
 public slots:
 	void OnLoadDemo(const QString& FileName);
 

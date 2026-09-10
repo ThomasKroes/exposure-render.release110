@@ -97,6 +97,13 @@ CCudaModel	gModel;
 CCudaView	gRenderCanvasView;
 CCudaView	gNavigatorView;
 
+// Render() used to cudaMalloc and cudaFree both of these on every frame. At the
+// frame rates this reaches that is several hundred allocations a second for two
+// objects whose size never changes, so they are allocated once and reused.
+static CScene*		gpDevScene	= NULL;
+static CCudaView*	gpDevView	= NULL;
+
+
 // Creates a texture object over a cudaArray with the sampling state the old
 // texture references carried in their member fields.
 static cudaTextureObject_t CreateArrayTextureObject(cudaArray_t Array, cudaTextureReadMode ReadMode, cudaTextureFilterMode FilterMode, bool Normalized, int NoDimensions)
@@ -236,6 +243,18 @@ void ResetRenderCanvasView(void)
 void FreeRenderCanvasView(void)
 {
 	DestroyTextureObject(ghTexRunningEstimateRgba);
+
+	if (gpDevScene != NULL)
+	{
+		HandleCudaError(cudaFree(gpDevScene));
+		gpDevScene = NULL;
+	}
+
+	if (gpDevView != NULL)
+	{
+		HandleCudaError(cudaFree(gpDevView));
+		gpDevView = NULL;
+	}
 
 	gRenderCanvasView.Free();
 }
@@ -481,19 +500,23 @@ void BindConstants(CScene* pScene)
 
 void Render(const int& Type, CScene& Scene, CTiming& RenderImage, CTiming& BlurImage, CTiming& PostProcessImage, CTiming& DenoiseImage)
 {
-	CScene* pDevScene = NULL;
+	if (gpDevScene == NULL)
+		HandleCudaError(cudaMalloc(&gpDevScene, sizeof(CScene)));
 
-	HandleCudaError(cudaMalloc(&pDevScene, sizeof(CScene)));
+	if (gpDevView == NULL)
+		HandleCudaError(cudaMalloc(&gpDevView, sizeof(CCudaView)));
+
+	CScene*		pDevScene	= gpDevScene;
+	CCudaView*	pDevView	= gpDevView;
+
 	HandleCudaError(cudaMemcpy(pDevScene, &Scene, sizeof(CScene), cudaMemcpyHostToDevice));
 
 	if (Scene.m_Camera.m_Focus.m_Type == 0)
 		Scene.m_Camera.m_Focus.m_FocalDistance = NearestIntersection(pDevScene);
 
+	// The focal distance above is written back into Scene, so the device copy is
+	// refreshed before the kernels read it.
 	HandleCudaError(cudaMemcpy(pDevScene, &Scene, sizeof(CScene), cudaMemcpyHostToDevice));
-
-	CCudaView* pDevView = NULL;
-
-	HandleCudaError(cudaMalloc(&pDevView, sizeof(CCudaView)));
 	HandleCudaError(cudaMemcpy(pDevView, &gRenderCanvasView, sizeof(CCudaView), cudaMemcpyHostToDevice));
 
 	
@@ -531,6 +554,4 @@ void Render(const int& Type, CScene& Scene, CTiming& RenderImage, CTiming& BlurI
 	DenoiseImage.AddDuration(TmrDenoise.ElapsedTime());
 	
 
-	HandleCudaError(cudaFree(pDevScene));
-	HandleCudaError(cudaFree(pDevView));
 }

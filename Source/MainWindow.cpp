@@ -20,7 +20,16 @@
 #include "AboutDialog.h"
 #include "Scene.h"
 
-QUrl	gVersionInfoUrl("http://exposure-render.googlecode.com/hg/VersionInfo.xml");
+// The original endpoint was on Google Code, which shut down in 2016, so every
+// startup ended in two red log lines and a failed DOM parse of the error body
+// that got written to disk. There is no replacement host, so the check is off
+// unless someone points it at one:
+//
+//     [updates]
+//     versionInfoUrl=https://example.org/VersionInfo.xml
+//
+// in the QSettings file for TU Delft / Exposure Render.
+QUrl	gVersionInfoUrl;
 int		gVersionID = 303;
 
 // Main window singleton
@@ -61,7 +70,11 @@ CMainWindow::CMainWindow() :
 	QObject::connect(&gStatus, SIGNAL(RenderEnd()), this, SLOT(OnRenderEnd()));
 	QObject::connect(&m_HttpGet, SIGNAL(done()), this, SLOT(VersionInfoDownloaded()));
 
-	OnCheckForUpdates();
+	gVersionInfoUrl = QUrl(QSettings().value("updates/versionInfoUrl").toString());
+
+	// Only reach for the network if an endpoint has actually been configured.
+	if (gVersionInfoUrl.isValid() && !gVersionInfoUrl.isEmpty())
+		OnCheckForUpdates();
 }
 
 CMainWindow::~CMainWindow(void)
@@ -116,7 +129,7 @@ void CMainWindow::CreateMenus(void)
 	m_pHelpMenu->addSeparator();
 
 	m_pHelpMenu->addAction(GetIcon("globe"), "Visit Website", this, SLOT(OnVisitWebsite()));
-//	m_pHelpMenu->addAction(GetIcon("globe"), "Check for updates", this, SLOT(OnCheckForUpdates()));
+	m_pHelpMenu->addAction(GetIcon("globe"), "Check for updates", this, SLOT(OnCheckForUpdates()));
 
 	UpdateRecentFileActions();
 }
@@ -336,18 +349,31 @@ void CMainWindow::OnSaveImage(void)
 	gpRenderThread->PauseRendering(false);
 }
 
+QString CMainWindow::VersionInfoPath(void)
+{
+	const QString Directory = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+	QDir().mkpath(Directory);
+
+	return Directory + "/" + QFileInfo(gVersionInfoUrl.path()).fileName();
+}
+
 void CMainWindow::OnCheckForUpdates(void)
 {
-	const QString FilePath = QApplication::applicationDirPath() + "/" + QFileInfo(gVersionInfoUrl.path()).fileName();
+	if (!gVersionInfoUrl.isValid() || gVersionInfoUrl.isEmpty())
+	{
+		Log("No update endpoint is configured (updates/versionInfoUrl)", "globe");
+		return;
+	}
 
-	m_HttpGet.GetFile(gVersionInfoUrl, FilePath);
+	m_HttpGet.GetFile(gVersionInfoUrl, VersionInfoPath());
 }
 
 void CMainWindow::VersionInfoDownloaded(void)
 {
 	Log("Version info downloaded", "globe");
 
-	const QString FilePath = QApplication::applicationDirPath() + "/" + QFileInfo(gVersionInfoUrl.path()).fileName();
+	const QString FilePath = VersionInfoPath();
 
 	QFile XmlFile;
 
@@ -363,7 +389,7 @@ void CMainWindow::VersionInfoDownloaded(void)
 
 	if (!DOM.setContent(&XmlFile))
 	{
-		Log("Failed to parse " + QFileInfo(FilePath).fileName() + "into a DOM tree.", QLogger::Critical);
+		Log("Failed to parse " + QFileInfo(FilePath).fileName() + " into a DOM tree.", QLogger::Critical);
 		XmlFile.close();
 		return;
 	}
