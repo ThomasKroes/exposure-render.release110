@@ -17,11 +17,17 @@
 
 int main(int ArgumentCount, char* pArgv[])
 {
+	// QVTKOpenGLNativeWidget needs its surface format installed as the default
+	// before the QApplication exists. Without this VTK is handed a context too
+	// old for its own shaders and every program fails with "unsupported version
+	// 150", leaving the render canvas blank.
+	QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
+
 	// Create the application
     QApplication Application(ArgumentCount, pArgv);
 
-	// Adjust style
-	Application.setStyle("plastique");
+	// Adjust style ("plastique" was a Qt 4 style and is silently ignored in Qt 6)
+	Application.setStyle("Fusion");
 	Application.setOrganizationName("TU Delft");
 	Application.setApplicationName("Exposure Render");
 	

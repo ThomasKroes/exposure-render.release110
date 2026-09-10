@@ -62,7 +62,6 @@ protected:
 	QPushButton		m_RemovePreset;
 	QPushButton		m_LoadPresets;
 	QPushButton		m_SavePresets;
-	QPresetList		m_PresetItems;
 };
 
 template <class T>
@@ -90,11 +89,11 @@ public:
 
 		for (int i = 0; i < m_Presets.size(); i++)
 		{
-			// Put pointer to preset in void pointer of variant
-			QVariant Variant = QVariant::fromValue((void*)m_PresetItems[i]);
-
-			// Add the item
-			m_PresetName.addItem(m_Presets[i].GetName(), Variant);
+			// The item carried a QVariant holding m_PresetItems[i], but that list was
+			// never populated, so this indexed an empty list for every preset. Nothing
+			// ever read the variant back -- presets are looked up by name and row -- so
+			// the item is added without it.
+			m_PresetName.addItem(m_Presets[i].GetName());
 		}
 	}
 
