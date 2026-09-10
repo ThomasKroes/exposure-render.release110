@@ -168,9 +168,19 @@ void CVtkWidget::OnRenderLoopTimer(void)
 	if (!gpRenderThread)
 		return;
 
-	QMutexLocker(&gpRenderThread->m_Mutex);
+	// This was QMutexLocker(&gpRenderThread->m_Mutex) -- an unnamed temporary,
+	// destroyed at the end of its own full expression, so the lock was released
+	// before the copy below ever ran. Qt 6 marks QMutexLocker [[nodiscard]],
+	// which is what surfaced it.
+	//
+	// The lock is scoped to the copy alone: past that m_FrameBuffer is private to
+	// this thread, and holding it across the VTK pipeline update would stall the
+	// render thread on every frame.
+	{
+		QMutexLocker Lock(&gFrameBuffer.m_Mutex);
 
-	m_FrameBuffer = gFrameBuffer;
+		m_FrameBuffer = gFrameBuffer;
+	}
 
 	if (m_FrameBuffer.GetPixels() == NULL)
 		return;

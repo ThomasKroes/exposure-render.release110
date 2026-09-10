@@ -94,6 +94,10 @@ QFrameBuffer::~QFrameBuffer(void)
 
 void QFrameBuffer::Set(unsigned char* pPixels, const int& Width, const int& Height)
 {
+	// The writer never took this lock either, so the buffer the UI thread copies
+	// from could be reallocated underneath it.
+	QMutexLocker Lock(&m_Mutex);
+
 	const bool Dirty = Width != m_Width || Height != m_Height;
 
 	m_Width		= Width;
